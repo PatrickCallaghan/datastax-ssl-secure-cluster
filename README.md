@@ -1,25 +1,27 @@
 ## Securing a DSE Cluster with SSL
-This demo gives a walkthrough of setting a secure cluster over ssl. It shows how to create node-to-node ssl connections and how to connect to the cluster over ssl from a cqlsh client. This walkthrough is based on the standard cassandra and dse docs around securing a cluster with ssl. These should be read first for a better understanding of what we are trying to achieve.
+This demo gives a walkthrough of creating a secure cluster over ssl. It shows how to create node-to-node ssl connections and how to connect to the cluster over ssl from a cqlsh client. This walkthrough is based on the standard cassandra and dse docs around securing a cluster with ssl. These should be read first for a better understanding of what we are trying to achieve.
 http://www.datastax.com/docs/datastax_enterprise3.2/security/ssl_node_to_node#ssl-node-to-node
 and
 http://www.datastax.com/docs/datastax_enterprise3.2/security/ssl_transport
 
-
-
 #### Pre-requisites
-It is required that you have a running cluster and the relevant tools like keytool, openssl and ssh already installed and configured. Using a tool like cluster ssh it extremely handy for talking to mulitple servers at the same time. https://code.google.com/p/csshx/
+It is required that you have a running cluster and the relevant tools like keytool, openssl and ssh already installed and configured. Using a tool like cluster ssh makes it extremely handy for talking to mulitple servers at the same time. https://code.google.com/p/csshx/
 
-To enable the hosts to talk directly to each other through hostnames, the /etc/hosts file should be updated to map all IPs to hostnames e.g.  
+To enable the hosts to talk directly to each other through hostnames, the /etc/hosts file should be updated on each node to map all IPs to hostnames e.g.  
 
     192.168.25.149	cassandra-secure1
     192.168.25.150	cassandra-secure2
     192.168.25.151	cassandra-secure3
+    
+All cassandra.yaml files on each node use the hostname as the listen_address, rpc_address and seed. 
 
 ## Server to Server over ssl.
 
-For each server we need to create a private/public keys to allow the servers to communicate to each other over ssl. In the below example I have filling in the relevant info for my hostnames but this will need to changed if you use other hostnames. For that reason, it might be better to use the hostnames I have used just to get a working version and to understand the process. 
+For each server we need to create a private/public keys to allow the servers to communicate to each other over ssl. In the below example I have filled in the relevant info for my hostnames but this will need to changed if you use other hostnames. For that reason, it might be better to use the hostnames I have used just to get a working version and to understand the process. Also I have filled in test data for the name and organisationl unit etc for creating a key. 
 
-Note : when we generate a key with use a Common Name (CN=) as the server name we are creating the key for. 
+Note : when we generate a key we use a Common Name (CN=) as the server name we are creating the key for. 
+
+I created a directory /etc/dse/certs on each node and I run all my keytool and openssl commands from there.
 
 These can be run together on cassandra-secure1
 
@@ -37,7 +39,7 @@ These can be run together on cassandra-secure3
     keytool -export -alias cassandra-secure3 -file cassandra-secure3.cer -keystore .cassandra-secure3-keystore -storepass cassandra -keypass cassandra
 
 
-To create a user based cert for accessing through cqlsh
+To create a user based cert for accessing cassandra-secure1 through cqlsh, on cassandra-secure1 run
 
     keytool -importkeystore -srckeystore .cassandra-secure1-keystore -destkeystore cassandra-secure1-user.p12 -deststoretype PKCS12
     openssl pkcs12 -in cassandra-secure1-user.p12 -out cassandra-secure1-user.pem -nodes 
@@ -89,7 +91,7 @@ You can check that the .truststore has the relevant entries, each .truststore sh
 
     keytool -list -keystore .truststore 
 
-We need to enable the node-to-node in the cassandra.yaml file
+We need to enable the node-to-node in the cassandra.yaml file, for cassandra-secure1 it would be 
 
     server_encryption_options:  
         internode_encryption: all
