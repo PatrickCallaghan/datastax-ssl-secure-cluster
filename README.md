@@ -1,5 +1,4 @@
-## SSL Secure DSE Cluster 
-
+## Securing a DSE Cluster with SSL
 This demo gives a walkthrough of setting a secure cluster over ssl. It shows how to create node-to-node ssl connections and how to connect to the cluster over ssl from a cqlsh client. This walkthrough is based on the standard cassandra and dse docs around securing a cluster with ssl. These should be read first for a better understanding of what we are trying to achieve.
 http://www.datastax.com/docs/datastax_enterprise3.2/security/ssl_node_to_node#ssl-node-to-node
 and
