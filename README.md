@@ -48,7 +48,7 @@ To create a user based cert for accessing cassandra-secure1 through cqlsh, on ca
 We have created public and private keys for all nodes in our cluster. We have also created user pem files to be able to connect over cqlsh with ssl to the cassandra-secure1 node.
 
 We need to server copy all cer files to each of the other certs directory.
-eg
+
 From cassandra-secure1
 
     scp cassandra-secure1.cer root@cassandra-secure2:/etc/dse/certs
