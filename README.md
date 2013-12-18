@@ -109,7 +109,7 @@ Any problems see Troubleshooting
 
 ## Client to Server
 
-We need to create a  ~/.cqlshrc file which holds the properties used when we are connecting to a cluster using cqlsh. NOTE this gets moved into ~/.cassandra/.cqlshrc in more recent versions. 
+We need to create a  ~/.cqlshrc file which holds the properties used when we are connecting to a cluster using cqlsh. NOTE this gets moved into ~/.cassandra/cqlshrc in more recent versions. 
 
 We have only created a pem file for cassandra-secure1 so that it where we will try to connect. If you require access to other nodes, you will need to follow the steps to create a pem file for that server. The ~/.cqlshrc should be 
   
