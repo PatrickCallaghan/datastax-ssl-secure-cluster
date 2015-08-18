@@ -119,7 +119,7 @@ We have only created a pem file for cassandra-secure1 so that it where we will t
 
     [connection]
     hostname = cassandra-secure1
-    port = 9160
+    port = 9042
     factory = cqlshlib.ssl.ssl_transport_factory
 
     [ssl]
